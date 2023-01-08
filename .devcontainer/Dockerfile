@@ -72,12 +72,11 @@ ADD .devcontainer/init_container.sh /usr/local/bin/
 ADD .devcontainer/hive-site.xml /home/glue_user/spark/conf/hive-site.xml
 
 # Configure profile
-
-RUN echo 'alias python=python3' >> "${HOME}/.bash_profile"
-RUN echo 'export PATH="${HOME}/aws-glue-libs/bin:${HOME}/spark/bin:${PATH}":${HOME}/.local/bin' >> "${HOME}/.bash_profile"
-RUN echo 'export SPARK_HOME="${HOME}/spark"' >> "${HOME}/.bash_profile"
-RUN echo 'export AWS_REGION=eu-central-1' >> "${HOME}/.bash_profile"
-RUN echo 'source "${HOME}/.bash_profile"' >> "${HOME}/.bashrc"
+RUN echo 'alias python=python3' >> "${HOME}/.profile"
+RUN echo 'export PATH="${HOME}/aws-glue-libs/bin:${HOME}/spark/bin:${PATH}":${HOME}/.local/bin' >> "${HOME}/.profile"
+RUN echo 'export SPARK_HOME="${HOME}/spark"' >> "${HOME}/.profile"
+RUN echo 'export AWS_REGION=eu-central-1' >> "${HOME}/.profile"
+RUN echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> "${HOME}/.profile"
 
 ENV AWS_REGION="eu-central-1"
 ENV SBT_OPTS="-Xms512M -Xmx2G -Xss2M -XX:MaxMetaspaceSize=1G"
