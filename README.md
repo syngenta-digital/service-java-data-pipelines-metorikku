@@ -208,3 +208,9 @@ In order to generate a new version:
     ```bash
     sbt 'set test in assembly := {}' clean assembly
     ```
+
+4. Delete devcontainer containers (non vscode shell):
+
+    ```bash
+    docker rm -f $(docker ps -aqf "name=service-java-data-pipelines-metorikku_")
+    ```

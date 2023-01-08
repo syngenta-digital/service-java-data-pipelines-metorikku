@@ -38,7 +38,7 @@ WORKDIR "/home/${USERNAME}"
 ENV HOME="/home/${USERNAME}"
 
 # Install Java & related
-RUN curl -s "https://get.sdkman.io" | bash
+RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash
 
 ARG JDK_VERSION="11"
 ARG SCALA_VERSION="2.12.17"
@@ -66,11 +66,11 @@ RUN wget -qO- "https://github.com/awslabs/aws-glue-libs/archive/refs/tags/v$AWS_
 
 RUN source "${HOME}/.sdkman/bin/sdkman-init.sh" \
     && cd aws-glue-libs \
-    && mvn clean package dependency:copy-dependencies
+    && mvn clean package dependency:copy-dependencies \
+    && mkdir conf
 
 # Other stuff
 ADD .devcontainer/init_container.sh /usr/local/bin/
-ADD .devcontainer/hive-site.xml /home/glue_user/spark/conf/hive-site.xml
 
 # Configure profile
 RUN echo 'alias python=python3' >> "${HOME}/.profile"
@@ -81,3 +81,10 @@ RUN echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/b
 
 ENV AWS_REGION="eu-central-1"
 ENV SBT_OPTS="-Xms512M -Xmx2G -Xss2M -XX:MaxMetaspaceSize=1G"
+
+# Init aws-glue-libs
+ADD .devcontainer/glue-setup.sh "${HOME}/aws-glue-libs/bin/glue-setup.sh"
+ADD .devcontainer/hive-site.xml "${HOME}/aws-glue-libs/conf/hive-site.xml"
+
+RUN source "$HOME/.profile" \
+    && bash "$HOME/aws-glue-libs/bin/glue-setup.sh"
