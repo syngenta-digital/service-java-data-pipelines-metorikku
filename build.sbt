@@ -19,7 +19,7 @@ scmInfo := Some(
 scalaVersion := Option(System.getenv("SCALA_VERSION")).getOrElse("2.12.17")
 
 val sparkVersion: Def.Initialize[String] = Def.setting {
-  Option(System.getenv("SPARK_VERSION")).getOrElse("3.1.3")
+  Option(System.getenv("SPARK_VERSION")).getOrElse("3.3.1")
 }
 
 val jacksonVersion: Def.Initialize[String] = Def.setting {
@@ -31,7 +31,7 @@ val deequVersion: Def.Initialize[String] = Def.setting {
 }
 
 val sparkTestVersion: Def.Initialize[String] = Def.setting {
-  "3.1.2_1.1.2"
+  "3.3.1_1.3.0"
 }
 
 Test / testOptions := Seq(
@@ -69,7 +69,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion.value % "provided",
   "org.apache.spark" %% "spark-streaming"      % sparkVersion.value % "provided",
   "org.apache.spark" %% "spark-avro"           % sparkVersion.value % "provided",
-  "com.holdenkarau" %% "spark-testing-base" % sparkTestVersion.value % "test" excludeAll excludeSpark,
+  "com.holdenkarau" %% "spark-testing-base" % sparkTestVersion.value % "test" excludeAll (excludeSpark),
   "com.github.scopt" %% "scopt"         % "3.7.1",
   "org.scala-lang"    % "scala-library" % scalaVersion.value,
   "com.typesafe.play" %% "play-json" % "2.9.3" excludeAll (excludeJacksonCore, excludeJacksonDatatformat, excludeJacksonDatatype, excludeJacksonModule),
