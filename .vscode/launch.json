@@ -11,10 +11,11 @@
             "mainClass": "com.yotpo.metorikku.Metorikku",
             "args": [
                 "-c",
-                "tests/config/mongodb_2_s3/main.yaml"
+                "tests/config/postgres_2_mongodb/main.yaml"
             ],
-            "jvmOptions": ["-Dspark.master=local[*]"],
-            "env": {}
+            "jvmOptions": [
+                "-Dspark.master=local[*]"
+            ]
         }
     ]
 }
