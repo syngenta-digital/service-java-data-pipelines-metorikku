@@ -145,7 +145,9 @@ object ValidationRunner {
         case Some(metric: DoubleMetric) =>
           metric.value match {
             case Success(value) =>
-              metric.entity.toString match {
+              val entityType = metric.entity.toString
+
+              entityType match {
                 case "Column" =>
                   logByLevel(
                     verificationResult.status,
@@ -162,7 +164,7 @@ object ValidationRunner {
                       metric.name
                     )
                   )
-                case "Mutlicolumn" =>
+                case "Multicolumn" =>
                   logByLevel(
                     verificationResult.status,
                     doubleMetricColumnConstrainFailedMsg.format(
