@@ -36,7 +36,7 @@ commands:
           name: Start Docker Compose
           command: |
             echo ${GITHUB_TOKEN} | docker login ghcr.io -u "$GITHUB_EMAIL" --password-stdin
-        
+
             LOCAL_DEV=FALSE docker-compose -f .devcontainer/docker-compose.yml up -d --build
 
             docker ps
@@ -108,7 +108,7 @@ commands:
 jobs:
   perform-qa:
     machine:
-      image: ubuntu-2204:2022.10.1
+      image: cimg/base:2024.01
       docker_layer_caching: true
     resource_class: medium
     steps:
