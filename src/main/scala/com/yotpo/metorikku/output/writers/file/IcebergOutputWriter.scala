@@ -24,7 +24,7 @@ object IcebergOutputWriter extends WriterSessionRegistration {
     )
     sparkConf.set(
       "spark.sql.catalog.spark_catalog",
-      "org.apache.iceberg.spark.SparkCatalog"
+      "org.apache.iceberg.spark.SparkSessionCatalog"
     )
     sparkConf.set(
       "spark.sql.iceberg.handle-timestamp-without-timezone",
