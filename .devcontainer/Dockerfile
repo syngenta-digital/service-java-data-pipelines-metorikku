@@ -55,6 +55,7 @@ SHELL ["/bin/bash", "-c"]
 #     rm -Rf /home/$USERNAME/.config/pypoetry
 
 ADD .devcontainer/init_container.sh /usr/local/bin/
+ADD src/main/resources/hive-site.xml "/tmp/"
 
 # # Install Metorikku libraries
 # RUN mkdir /home/${USERNAME}/spark-extra-libs/
@@ -72,14 +73,14 @@ ENV SCALA_BINARY_VERSION="2.12"
 ARG SBT_VERSION="1.8.0"
 ARG SPARK_VERSION="3.3.1"
 
+
 RUN source "${HOME}/.sdkman/bin/sdkman-init.sh" \
     && sdk install java "$JAVA_VERSION" \
     && sdk install scala "$SCALA_VERSION" \
     && sdk install sbt "$SBT_VERSION" \
     && sdk install spark "$SPARK_VERSION" \
-    && ls -la "${HOME}/.sdkman/candidates/spark/current"/jars/guava-*.jar \
-    && rm -Rf "${HOME}/.sdkman/candidates/spark/current"/jars/guava-*.jar
-ADD src/main/resources/hive-site.xml "${HOME}/.sdkman/candidates/spark/current/conf"
+    && rm -Rf "${HOME}/.sdkman/candidates/spark/current"/jars/guava-*.jar \
+    && mv /tmp/hive-site.xml "${HOME}/.sdkman/candidates/spark/current/conf"
 
 # Clean up
 ENV DEBIAN_FRONTEND=dialog
