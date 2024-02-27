@@ -16,11 +16,11 @@ services:
     image: ghcr.io/syngenta-digital/service-java-data-pipelines-metorikku:devcontainer
     environment:
       <<: *default-environment
-    user: glue_user
-    command: -c "sleep infinity"
+    user: vscode
+    command: bash -c "sleep infinity"
     volumes:
       - ../:/workspace
-      - ${HOME}/.aws:/home/glue_user/.aws:ro
+      - ${HOME}/.aws:/home/vscode/.aws:ro
       - ${HOME}/.gnupg/public.key:/tmp/.gnupg/public.key:ro
       - ${HOME}/.gnupg/private.key:/tmp/.gnupg/private.key:ro
       - ${HOME}/.ssh:/tmp/.ssh:ro

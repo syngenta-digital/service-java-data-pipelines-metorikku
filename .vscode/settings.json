@@ -2,5 +2,5 @@
     "files.watcherExclude": {
         "**/target": true
     },
-    "metals.javaHome": "/usr/lib/jvm/java-1.8.0-amazon-corretto.aarch64/"
+    "metals.javaHome": "/home/vscode/.sdkman/candidates/java/current"
 }
