@@ -80,7 +80,7 @@ RUN source "${HOME}/.sdkman/bin/sdkman-init.sh" \
     && sdk install sbt "$SBT_VERSION" \
     && sdk install spark "$SPARK_VERSION" \
     && rm -Rf "${HOME}/.sdkman/candidates/spark/current"/jars/guava-*.jar \
-    && mv /tmp/hive-site.xml "${HOME}/.sdkman/candidates/spark/current/conf"
+    && cp /tmp/hive-site.xml "${HOME}/.sdkman/candidates/spark/current/conf/"
 
 # Clean up
 ENV DEBIAN_FRONTEND=dialog
