@@ -3,13 +3,12 @@
 INIT_FILE="$HOME/.devcontainer_initiated"
 
 update_cas(){
-    mkdir -p /tmp/certs
+    sudo bash -c "
+openssl s_client -showcerts -verify 5 -connect github.com:443 < /dev/null |
+ awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/{ if(/BEGIN CERTIFICATE/){a++}; out=\"/usr/local/share/ca-certificates/cert\"a\".crt\"; print >out}'
 
-    openssl s_client -showcerts -verify 5 -connect github.com:443 < /dev/null | \
-        awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/{ if(/BEGIN CERTIFICATE/){a++}; out="/tmp/certs/cert"a".crt"; print >out}' 
-
-    sudo cp /tmp/certs/*.crt /etc/pki/ca-trust/source/anchors/
-    sudo update-ca-trust
+update-ca-certificates
+"
 }
 
 if [[ ! -f "$INIT_FILE" ]]; then
