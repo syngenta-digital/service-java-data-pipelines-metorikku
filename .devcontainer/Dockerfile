@@ -1,16 +1,5 @@
 ARG PYTHON_VERSION=3.11
 
-# FROM gradle:7.6.0 as gradle
-
-# COPY build.gradle /tmp/
-
-# COPY .env /tmp/.env
-
-# RUN bash -c ' \
-#     cd /tmp && export $(<.env grep -v "^#" | xargs) && gradle --no-daemon download \
-#     && ls -la /tmp/jars \
-#     '
-
 FROM mcr.microsoft.com/devcontainers/python:${PYTHON_VERSION}-bullseye
 
 ARG PYTHON_PROJECT_FOLDER="metorikku"
@@ -40,29 +29,8 @@ WORKDIR /home/${USERNAME}/
 
 SHELL ["/bin/bash", "-c"]
 
-# RUN mkdir -p /tmp/project && \
-#     cd /tmp/project && \
-#     touch README.md
-
-# COPY pyproject.toml poetry.lock "${PYTHON_PROJECT_FOLDER}" /tmp/project/
-# COPY "${PYTHON_PROJECT_FOLDER}/" "/tmp/project/${PYTHON_PROJECT_FOLDER}/"
-
-# RUN curl -sSL https://install.python-poetry.org | python3 - --version "${POETRY_VERSION}" && \    
-#     poetry config repositories.fury "${FURY_URL}" && \
-#     poetry config http-basic.fury "${FURY_AUTH}" "${FURY_AUTH}" && \
-#     cd /tmp/project/ && \
-#     poetry install && \
-#     rm -Rf /home/$USERNAME/.config/pypoetry
-
 ADD .devcontainer/init_container.sh /usr/local/bin/
-ADD src/main/resources/hive-site.xml "/tmp/"
-
-# # Install Metorikku libraries
-# RUN mkdir /home/${USERNAME}/spark-extra-libs/
-# COPY --from=gradle /tmp/jars /home/${USERNAME}/spark-extra-libs/
-# RUN ls -la /home/${USERNAME}/spark-extra-libs \
-#  && cd /home/${USERNAME}/spark-extra-libs \
-#  && unzip service-java-data-pipelines-metorikku_*-assembly.jar "schemas/*.yaml"
+ADD .devcontainer/hive-site.xml "/tmp/"
 
 # Install Java & related
 RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash
@@ -72,7 +40,6 @@ ARG SCALA_VERSION="2.12.17"
 ENV SCALA_BINARY_VERSION="2.12"
 ARG SBT_VERSION="1.8.0"
 ARG SPARK_VERSION="3.3.1"
-
 
 RUN source "${HOME}/.sdkman/bin/sdkman-init.sh" \
     && sdk install java "$JAVA_VERSION" \
