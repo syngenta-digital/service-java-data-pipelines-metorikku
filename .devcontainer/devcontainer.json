@@ -1,25 +1,28 @@
 {
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "main",
-    "workspaceFolder": "/workspace",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "main",
+	"workspaceFolder": "/workspace",
 	"initializeCommand": [
 		"bash",
 		"-c",
 		"docker pull ghcr.io/syngenta-digital/service-java-data-pipelines-metorikku:devcontainer"
 	],
-    "postCreateCommand": [
-        "bash",
-        "/usr/local/bin/init_container.sh"
-    ],
-    "extensions": [
-		"mtxr.sqltools",
-		"adamhartford.vscode-base64",
-		"redhat.vscode-yaml",
-		"njpwerner.autodocstring",
-		"eamodio.gitlens",
-		"mtxr.sqltools-driver-pg",
-		"DavidAnson.vscode-markdownlint",
-		"scalameta.metals",
-		"eriklynd.json-tools"
-	]
+	"postCreateCommand": [
+		"bash",
+		"/usr/local/bin/init_container.sh"
+	],
+	"customizations": {
+		"extensions": [
+			"mtxr.sqltools",
+			"adamhartford.vscode-base64",
+			"redhat.vscode-yaml",
+			"njpwerner.autodocstring",
+			"eamodio.gitlens",
+			"mtxr.sqltools-driver-pg",
+			"DavidAnson.vscode-markdownlint",
+			"scalameta.metals",
+			"eriklynd.json-tools"
+		]
+	}
+}
 }
