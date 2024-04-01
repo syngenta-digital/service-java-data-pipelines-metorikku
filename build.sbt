@@ -47,8 +47,11 @@ lazy val excludeSpark    = ExclusionRule(organization = "org.apache.spark")
 lazy val excludeLog4j    = ExclusionRule(organization = "org.apache.logging.log4j")
 lazy val excludeParquet  = ExclusionRule(organization = "org.apache.parquet")
 lazy val excludeScalanlp = ExclusionRule(organization = "org.scalanlp")
-lazy val excludeJackson  = ExclusionRule(organization = "com.fasterxml.jackson.*")
-lazy val excludeAWS      = ExclusionRule(organization = "com.amazonaws")
+lazy val excludeJacksonCore = ExclusionRule(organization = "com.fasterxml.jackson.core")
+lazy val excludeJacksonDataFormat = ExclusionRule(organization = "com.fasterxml.jackson.dataformat")
+lazy val excludeJacksonDataType = ExclusionRule(organization = "com.fasterxml.jackson.datatype")
+lazy val excludeJacksonModule = ExclusionRule(organization = "com.fasterxml.jackson.module")
+lazy val excludeAWS = ExclusionRule(organization = "com.amazonaws")
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core"           % sparkVersion.value % "provided",
@@ -62,7 +65,7 @@ libraryDependencies ++= Seq(
   "com.holdenkarau" %% "spark-testing-base" % sparkTestVersion.value % "test" excludeAll (excludeSpark),
   "com.github.scopt"          %% "scopt"               % "3.7.1",
   "org.scala-lang"             % "scala-library"       % scalaVersion.value,
-  "com.typesafe.play"         %% "play-json"           % "2.9.4" excludeAll (excludeJackson),
+  "com.typesafe.play"         %% "play-json"           % "2.9.4" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion.value,
   "com.fasterxml.jackson.core" % "jackson-core"        % jacksonVersion.value,
   "com.fasterxml.jackson.core" % "jackson-databind"    % jacksonVersion.value,
@@ -71,9 +74,9 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.datatype"   % "jackson-datatype-jdk8"   % jacksonVersion.value,
   "com.fasterxml.jackson.datatype"   % "jackson-datatype-jsr310" % jacksonVersion.value,
   "com.fasterxml.jackson.module"    %% "jackson-module-scala"    % jacksonVersion.value,
-  "com.hubspot.jinjava" % "jinjava"       % "2.7.1" excludeAll (excludeJackson),
+  "com.hubspot.jinjava" % "jinjava"       % "2.7.1" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "org.influxdb"        % "influxdb-java" % "2.23",
-  "io.github.spark-redshift-community" %% "spark-redshift" % "6.2.0-spark_3.3" excludeAll (excludeAWS),
+  "io.github.spark-redshift-community" %% "spark-redshift" % "6.2.0-spark_3.3" excludeAll (excludeAWS, excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.segment.analytics.java" % "analytics"                 % "2.1.1" % "provided",
   "com.datastax.spark"        %% "spark-cassandra-connector" % "3.4.1" % "provided",
   "com.redislabs"             %% "spark-redis"               % "3.1.0" % "provided",
@@ -92,20 +95,20 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-slf4j-impl"          % "2.22.1" % "provided",
   "org.postgresql"           % "postgresql"                % "42.7.2",
   "io.delta"                %% "delta-core"                % "2.3.0",
-  "io.vertx"                 % "vertx-json-schema"         % "4.5.1" excludeAll (excludeJackson),
+  "io.vertx"                 % "vertx-json-schema"         % "4.5.1" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.google.guava"         % "guava"                     % "25.0-jre",
   "org.apache.sedona"       %% "sedona-core-3.0"           % "1.4.1" excludeAll (excludeSpark),
   "org.apache.sedona"       %% "sedona-sql-3.0"            % "1.4.1" excludeAll (excludeSpark),
   "org.apache.sedona"       %% "sedona-viz-3.0"            % "1.4.1" excludeAll (excludeSpark),
   "org.datasyslab"           % "geotools-wrapper"          % "1.4.0-28.2" excludeAll (excludeSpark),
-  "com.amazonaws"            % "aws-java-sdk-s3"           % "1.12.642",
-  "com.amazonaws"            % "aws-java-sdk-dynamodb"   % "1.12.642",
-  "software.amazon.awssdk"   % "dynamodb"                  % "2.23.8",
-  "software.amazon.awssdk"   % "glue"                      % "2.23.8",
-  "software.amazon.awssdk"   % "s3"                        % "2.23.8",
-  "software.amazon.awssdk"   % "sts"                       % "2.23.8",
-  "org.apache.iceberg"      %% "iceberg-spark-runtime-3.3" % "1.4.3",
-  "com.jayway.jsonpath"      % "json-path"                 % "2.8.0"
+  "com.amazonaws"            % "aws-java-sdk-s3"           % "1.12.642" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "com.amazonaws"            % "aws-java-sdk-dynamodb"     % "1.12.642" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "software.amazon.awssdk"   % "dynamodb"                  % "2.23.8" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "software.amazon.awssdk"   % "glue"                      % "2.23.8" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "software.amazon.awssdk"   % "s3"                        % "2.23.8" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "software.amazon.awssdk"   % "sts"                       % "2.23.8" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.iceberg"      %% "iceberg-spark-runtime-3.3" % "1.4.3" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "com.jayway.jsonpath"      % "json-path"                 % "2.8.0" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule)
 )
 
 resolvers ++= Seq(

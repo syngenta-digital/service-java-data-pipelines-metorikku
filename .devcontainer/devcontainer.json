@@ -12,17 +12,19 @@
 		"/usr/local/bin/init_container.sh"
 	],
 	"customizations": {
-		"extensions": [
-			"mtxr.sqltools",
-			"adamhartford.vscode-base64",
-			"redhat.vscode-yaml",
-			"njpwerner.autodocstring",
-			"eamodio.gitlens",
-			"mtxr.sqltools-driver-pg",
-			"DavidAnson.vscode-markdownlint",
-			"scalameta.metals",
-			"eriklynd.json-tools"
-		]
+		"vscode": {
+			"extensions": [
+				"mtxr.sqltools",
+				"adamhartford.vscode-base64",
+				"redhat.vscode-yaml",
+				"njpwerner.autodocstring",
+				"eamodio.gitlens",
+				"mtxr.sqltools-driver-pg",
+				"DavidAnson.vscode-markdownlint",
+				"scalameta.metals",
+				"eriklynd.json-tools"
+			]
+		}
 	}
 }
 }
