@@ -7,6 +7,7 @@ import net.minidev.json.JSONValue
 import java.sql.Timestamp
 import java.time.Instant
 import scala.util.Try
+import com.yotpo.metorikku.utils.FileUtils
 
 object UserDefinedFunctions {
 
@@ -19,21 +20,41 @@ object UserDefinedFunctions {
     .defaultConfiguration()
     .addOptions(com.jayway.jsonpath.Option.ALWAYS_RETURN_LIST)
 
-  def getJsonObject(jsonTxt: String, path: String): String = {
-    Try({
-      val document = jsonPathConfig.jsonProvider().parse(jsonTxt)
-
-      JSONValue.toJSONString(JsonPath.read(document, path))
-    }).getOrElse(null) // scalastyle:ignore null
+  def getJsonObject(
+      jsonTxt: String,
+      path: String,
+      compressIn: Boolean = false,
+      compressOut: Boolean = false
+  ): String = {
+    Option(getJsonObjects(jsonTxt, List(path), compressIn, compressOut).headOption)
+      .map(x => {
+        x.head
+      })
+      .getOrElse(null) // scalastyle:ignore null
   }
 
-  def getJsonObjects(jsonTxt: String, paths: List[String]): List[String] = {
+  def getJsonObjects(
+      jsonTxt: String,
+      paths: List[String],
+      compressIn: Boolean = false,
+      compressOut: Boolean = false
+  ): List[String] = {
     Try({
-      jsonPathConfig.jsonProvider().parse(jsonTxt)
+      val finalJsonTxt = compressIn match {
+        case true => FileUtils.decompressFromGzip(jsonTxt)
+        case _    => jsonTxt
+      }
+
+      jsonPathConfig.jsonProvider().parse(finalJsonTxt)
     }).map(document => {
       paths.map(path => {
         Try({
-          JSONValue.toJSONString(JsonPath.read(document, path))
+          (compressOut, JSONValue.toJSONString(JsonPath.read(document, path))) match {
+            case (true, value) => {
+              FileUtils.compressToGzip(value)
+            }
+            case (_, value) => value
+          }
         }).getOrElse(null) // scalastyle:ignore null
       })
     }).getOrElse(null) // scalastyle:ignore null

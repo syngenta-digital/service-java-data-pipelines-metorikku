@@ -28,6 +28,11 @@ import org.apache.log4j.Logger
 
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
+import java.util.zip.GZIPInputStream
+import java.io.ByteArrayOutputStream
+import java.io.ByteArrayInputStream
+import org.apache.commons.codec.binary.Base64
+import java.util.zip.GZIPOutputStream
 
 case class HadoopPath(path: Path, fs: FileSystem) {
   def open: FSDataInputStream = {
@@ -198,5 +203,28 @@ object FileUtils {
       .validate(new JsonObject(configFileJson))
 
     validationResult.checkValidity()
+  }
+
+  def decompressFromGzip(input: String): String = {
+    val compressedData = Base64.decodeBase64(input)
+    val inputStream    = new GZIPInputStream(new ByteArrayInputStream(compressedData))
+    val outputStream   = new ByteArrayOutputStream()
+    val buffer         = new Array[Byte](1024) // scalastyle:ignore magic.number
+    var len            = inputStream.read(buffer)
+    while (len > 0) {
+      outputStream.write(buffer, 0, len)
+      len = inputStream.read(buffer)
+    }
+    inputStream.close()
+    outputStream.close()
+    outputStream.toString("UTF-8")
+  }
+
+  def compressToGzip(input: String): String = {
+    val byteArrayOutputStream = new ByteArrayOutputStream()
+    val gzipOutputStream      = new GZIPOutputStream(byteArrayOutputStream)
+    gzipOutputStream.write(input.getBytes("UTF-8"))
+    gzipOutputStream.close()
+    new String(Base64.encodeBase64(byteArrayOutputStream.toByteArray))
   }
 }
