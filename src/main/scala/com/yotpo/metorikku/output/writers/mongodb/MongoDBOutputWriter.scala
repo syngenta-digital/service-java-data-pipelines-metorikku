@@ -114,8 +114,11 @@ class MongoDBOutputWriter(
     mongoDBConf match {
       case Some(mongoDBConf) =>
         props.get("preCommand") match {
-          case Some(command) =>
+          case Some(command) => {
+            log.info(s"Executing preCommand: ${command}")
             executeCommand(mongoDBConf, mongoDBProps, command)
+            log.info(s"Executed preCommand: ${command}")
+          }
           case _ =>
         }
 
@@ -141,8 +144,11 @@ class MongoDBOutputWriter(
         dataFrame.write.format("mongodb").mode(mongoDBProps.saveMode).options(options).save()
 
         props.get("postCommand") match {
-          case Some(command) =>
+          case Some(command) => {
+            log.info(s"Executing postCommand: ${command}")
             executeCommand(mongoDBConf, mongoDBProps, command)
+            log.info(s"Executed postCommand: ${command}")
+          }
           case _ =>
         }
 

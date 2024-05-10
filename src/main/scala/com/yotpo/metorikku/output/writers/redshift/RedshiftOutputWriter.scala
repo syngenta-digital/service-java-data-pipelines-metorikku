@@ -36,7 +36,6 @@ class RedshiftOutputWriter(props: Map[String, String], redshiftDBConf: Option[Re
   override def write(dataFrame: DataFrame): Unit = {
     redshiftDBConf match {
       case Some(redshiftDBConf) =>
-
         var df = dataFrame
 
         if (!dbOptions.maxStringSize.isEmpty) {
@@ -80,9 +79,11 @@ class RedshiftOutputWriter(props: Map[String, String], redshiftDBConf: Option[Re
           case Some(postCommitActions) =>
             val conn = DriverManager.getConnection(redshiftDBConf.jdbcURL)
             postCommitActions.trim.split(";").foreach { action =>
+              log.info(s"Executing postCommit: ${action}")
               val stmt = conn.prepareStatement(action)
               stmt.execute()
               stmt.close()
+              log.info(s"Executed postCommit: ${action}")
             }
             conn.close()
           case _ =>

@@ -12,3 +12,11 @@ output:
       tableName: iceberg_persons
       partitionBy: ["given_name"]
       replaceWhere: "given_name IS NOT NULL"
+      preActions: >
+        SELECT 1;
+        SELECT 2;
+        SELECT 3;
+      postActions: >
+        SELECT 1;
+        SELECT 2;
+        SELECT 3;

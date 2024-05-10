@@ -50,6 +50,8 @@ class IcebergOutputWriter(props: Map[String, Object], output: Option[Iceberg]) e
       saveMode: Option[String],
       partitionBy: Option[Seq[String]],
       replaceWhere: Option[String],
+      preActions: Option[String],
+      postActions: Option[String],
       formatVersion: Option[String],
       extraOptions: Option[Map[String, String]]
   )
@@ -59,6 +61,8 @@ class IcebergOutputWriter(props: Map[String, Object], output: Option[Iceberg]) e
     props.get("saveMode").asInstanceOf[Option[String]],
     props.get("partitionBy").asInstanceOf[Option[Seq[String]]],
     props.get("replaceWhere").asInstanceOf[Option[String]],
+    props.get("preActions").asInstanceOf[Option[String]],
+    props.get("postActions").asInstanceOf[Option[String]],
     props.get("formatVersion").asInstanceOf[Option[String]],
     props.get("extraOptions").asInstanceOf[Option[Map[String, String]]]
   )
@@ -95,6 +99,16 @@ class IcebergOutputWriter(props: Map[String, Object], output: Option[Iceberg]) e
       case None =>
     }
 
+    properties.preActions match {
+      case Some(preActions) =>
+        preActions.trim.split(";").foreach { action =>
+          log.info(s"Executing preAction: ${action}")
+          df.sparkSession.sql(action)
+          log.info(s"Executed preAction: ${action}")
+        }
+      case _ =>
+    }
+
     properties.saveMode.map(_.toLowerCase()) match {
       case Some("overwrite") => {
         properties.replaceWhere match {
@@ -122,6 +136,16 @@ class IcebergOutputWriter(props: Map[String, Object], output: Option[Iceberg]) e
           case _ => writer.using("iceberg").create()
         }
       case _ => writer.append()
+    }
+
+    properties.postActions match {
+      case Some(postActions) =>
+        postActions.trim.split(";").foreach { action =>
+          log.info(s"Executing postAction: ${action}")
+          df.sparkSession.sql(action)
+          log.info(s"Executed postAction: ${action}")
+        }
+      case _ =>
     }
   }
 }
