@@ -108,7 +108,7 @@ libraryDependencies ++= Seq(
   "org.apache.iceberg"      %% "iceberg-spark-runtime-3.3" % "1.5.2" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.jayway.jsonpath"      % "json-path"                 % "2.9.0" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "io.trino"                 % "trino-jdbc"                % "448",
-  "com.amazonaws"            % "athena-jdbc"               % "2024.20.2"
+  "com.amazon.athena"        % "jdbc"                      % "3.2.0" from "https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.2.0/athena-jdbc-3.2.0-with-dependencies.jar"
 )
 
 resolvers ++= Seq(
