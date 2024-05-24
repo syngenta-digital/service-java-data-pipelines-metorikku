@@ -49,9 +49,9 @@ lazy val excludeParquet  = ExclusionRule(organization = "org.apache.parquet")
 lazy val excludeScalanlp = ExclusionRule(organization = "org.scalanlp")
 lazy val excludeJacksonCore = ExclusionRule(organization = "com.fasterxml.jackson.core")
 lazy val excludeJacksonDataFormat = ExclusionRule(organization = "com.fasterxml.jackson.dataformat")
-lazy val excludeJacksonDataType = ExclusionRule(organization = "com.fasterxml.jackson.datatype")
-lazy val excludeJacksonModule = ExclusionRule(organization = "com.fasterxml.jackson.module")
-lazy val excludeAWS = ExclusionRule(organization = "com.amazonaws")
+lazy val excludeJacksonDataType   = ExclusionRule(organization = "com.fasterxml.jackson.datatype")
+lazy val excludeJacksonModule     = ExclusionRule(organization = "com.fasterxml.jackson.module")
+lazy val excludeAWS               = ExclusionRule(organization = "com.amazonaws")
 
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core"           % sparkVersion.value % "provided",
@@ -108,7 +108,7 @@ libraryDependencies ++= Seq(
   "org.apache.iceberg"      %% "iceberg-spark-runtime-3.3" % "1.5.2" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.jayway.jsonpath"      % "json-path"                 % "2.9.0" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "io.trino"                 % "trino-jdbc"                % "448",
-  "com.amazon.athena"        % "jdbc"                      % "3.2.0" from "https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.2.0/athena-jdbc-3.2.0-with-dependencies.jar"
+  "com.syncron.amazonaws"    % "simba-athena-jdbc-driver"  % "2.1.5" from s"https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.5.1000/AthenaJDBC42-2.1.5.1000.jar"
 )
 
 resolvers ++= Seq(
