@@ -22,7 +22,26 @@ context: &context
   - shared-github-token
   - shared-sonarcloud-token
 
-defaults-paramatetr-job: &defaults-paramatetr-job
+filters:
+  main: &filter_main
+    branches:
+      only:
+        - main
+        - master
+  release: &filter_release
+    branches:
+      ignore: /.*/
+    tags:
+      only:
+        - /^version-(patch|minor|major)$/
+  deploy: &filter_deploy
+    branches:
+      ignore: /.*/
+    tags:
+      only:
+        - /^deploy-(dev|sandbox|qa|prod)$/
+
+defaults-paramater-job: &defaults-paramater-job
   executor: main-docker-executor
 
 commands:
@@ -118,7 +137,7 @@ jobs:
       - scala-build
       - scala-test
   release:
-    <<: *defaults-paramatetr-job
+    <<: *defaults-paramater-job
     parameters:
       release_type:
         type: string
@@ -139,8 +158,10 @@ workflows:
     jobs:
       - release:
           context: *context
+          filters: *filter_release
           release_type: "<<pipeline.git.tag>>"
   main:
     jobs:
       - perform-qa:
+          filters: *filter_main
           context: *context
