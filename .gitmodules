@@ -1,0 +1,3 @@
+[submodule ".submodule/script-shell-data-pipelines-orb"]
+	path = .submodule/script-shell-data-pipelines-orb
+	url = git@github.com:syngenta-digital/script-shell-data-pipelines-orb.git

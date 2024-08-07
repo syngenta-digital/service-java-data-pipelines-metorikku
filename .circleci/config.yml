@@ -6,16 +6,6 @@ orbs:
   slack: circleci/slack@4.1.3
 
 parameters:
-  git_main_branch:
-    type: string
-    default: "master"
-  git_release_prefix:
-    type: string
-    default: "releases"
-  release_type:
-    type: string
-    enum: ["patch", "minor", "major"]
-    default: ""
   sbt_version:
     type: string
     default: "1.8.0"
@@ -24,6 +14,13 @@ executors:
   main-docker-executor:
     docker:
       - image: cimg/openjdk:11.0-node
+
+context: &context
+  - insight-engine-cicd
+  - shared-datadog-token
+  - shared-gemfury-tokens
+  - shared-github-token
+  - shared-sonarcloud-token
 
 defaults-paramatetr-job: &defaults-paramatetr-job
   executor: main-docker-executor
@@ -93,9 +90,12 @@ commands:
         type: string
     steps:
       - run:
+          name: Swith to main branch
+          command: <<include(scripts/common/utils_switch_to_main_or_master.sh)>>
+      - run:
           name: Publish release
           command: |
-            RELEASE_TYPE=$(echo "<<parameters.release_type>>" | sed -rn 's/(patch|minor|major)$/\1/p')
+            RELEASE_TYPE=$(echo "<<parameters.release_type>>" | sed 's/^version-//g' | sed -rn 's/(patch|minor|major)$/\1/p')
 
             # Exit if is not a release commit
             if [[ -z "$RELEASE_TYPE" ]]; then
@@ -132,26 +132,14 @@ workflows:
   release:
     when:
       or:
-        - equal: ["patch", "<<pipeline.parameters.release_type>>"]
-        - equal: ["minor", "<<pipeline.parameters.release_type>>"]
-        - equal: ["major", "<<pipeline.parameters.release_type>>"]
+        - equal: ["version-patch", "<<pipeline.git.tag>>"]
+        - equal: ["version-minor", "<<pipeline.git.tag>>"]
+        - equal: ["version-major", "<<pipeline.git.tag>>"]
     jobs:
       - release:
-          context:
-            - shared-gemfury-tokens
-            - shared-github-token
-          release_type: "<<pipeline.parameters.release_type>>"
-          filters:
-            branches:
-              only:
-                - <<pipeline.parameters.git_main_branch>>
-                - /^<<pipeline.parameters.git_release_prefix>>\/v\d+\.\d+\.\d+$/
+          context: *context
+          release_type: "<<pipeline.git.tag>>"
   main:
-    when:
-      equal: ["", "<<pipeline.parameters.release_type>>"]
     jobs:
       - perform-qa:
-          context:
-            - shared-sonarcloud-token
-            - shared-gemfury-tokens
-            - shared-github-token
+          context: *context
