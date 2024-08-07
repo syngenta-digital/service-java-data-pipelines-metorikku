@@ -89,7 +89,7 @@ libraryDependencies ++= Seq(
   "com.databricks"  %% "spark-xml" % "0.18.0",
   "com.outr"        %% "hasher"    % "1.2.2",
   "org.mongodb.spark"       %% "mongo-spark-connector"     % "10.3.0",
-  "mysql"                    % "mysql-connector-java"      % "8.4.0",
+  "mysql"                    % "mysql-connector-java"      % "8.0.33",
   "org.apache.logging.log4j" % "log4j-api"                 % "2.23.1" % "provided",
   "org.apache.logging.log4j" % "log4j-core"                % "2.23.1" % "provided",
   "org.apache.logging.log4j" % "log4j-slf4j-impl"          % "2.23.1" % "provided",
