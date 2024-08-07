@@ -91,7 +91,8 @@ commands:
     steps:
       - run:
           name: Swith to main branch
-          command: <<include(scripts/common/utils_switch_to_main_or_master.sh)>>
+          command: |
+            bash scripts/common/utils_switch_to_main_or_master.sh
       - run:
           name: Publish release
           command: |
