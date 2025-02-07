@@ -108,7 +108,7 @@ class JsonObjectTest extends AnyFunSuite {
         json,
         "$.store",
         compressOut = true
-      ) === "H4sIAAAAAAAAAI2QQWvDMAyF/4rxOQlLQqDOdRuU0e6QFXYYOziukoi41nCcjlDy32eXQd3TBkKHJ/Q96V14SzTy+uPClXTQk114zS10YMEo4AmXsxvIevEVe9CsAZi86tBp8OKbXND0E6OOuQHYIxg3e0TCvyz69XqTiWpN7uAdKodkYvTzGfRi2Luc+yGGf5M9BvSWDM32Rs2LTIi/sS8Za651ID0imAh98Mfufunh8CZ84ec4tcaPH9JSVGkuQt/cfIv/+W7BnqRhe9Bn1Boi2z21C3tCNcZWVVWmRV7meVreBSfWz4S3qBYVdr0p6SvewjGKQoSE1x9nfazryAEAAA=="
+      ) === "H4sIAAAAAAAA/42QQWvDMAyF/4rxOQlLQqDOdRuU0e6QFXYYOziukoi41nCcjlDy32eXQd3TBkKHJ/Q96V14SzTy+uPClXTQk114zS10YMEo4AmXsxvIevEVe9CsAZi86tBp8OKbXND0E6OOuQHYIxg3e0TCvyz69XqTiWpN7uAdKodkYvTzGfRi2Luc+yGGf5M9BvSWDM32Rs2LTIi/sS8Za651ID0imAh98Mfufunh8CZ84ec4tcaPH9JSVGkuQt/cfIv/+W7BnqRhe9Bn1Boi2z21C3tCNcZWVVWmRV7meVreBSfWz4S3qBYVdr0p6SvewjGKQoSE1x9nfazryAEAAA=="
     )
   }
 
@@ -130,7 +130,7 @@ class JsonObjectTest extends AnyFunSuite {
         "$.book[2].category",
         compressIn = true,
         compressOut = true
-      ) === "H4sIAAAAAAAAAFNKy0wuyczPUwIAIxYt6wkAAAA="
+      ) === "H4sIAAAAAAAA/1NKy0wuyczPUwIAIxYt6wkAAAA="
     )
   }
 

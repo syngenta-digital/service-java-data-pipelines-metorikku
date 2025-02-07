@@ -27,7 +27,7 @@ val sparkShortVersion: Def.Initialize[String] = Def.setting {
 }
 
 val jacksonVersion: Def.Initialize[String] = Def.setting {
-  Option(System.getenv("JACKSON_VERSION")).getOrElse("2.12.7")
+  Option(System.getenv("JACKSON_VERSION")).getOrElse("2.16.2")
 }
 
 val sparkTestVersion: Def.Initialize[String] = Def.setting {
@@ -58,14 +58,14 @@ lazy val excludeJacksonModule     = ExclusionRule(organization = "com.fasterxml.
 lazy val excludeAWS               = ExclusionRule(organization = "com.amazonaws")
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core"           % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-sql"            % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-mllib"          % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-hive"           % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-streaming"      % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-avro"           % sparkVersion.value % "provided",
-  "org.apache.spark" %% "spark-hadoop-cloud" % sparkVersion.value % "provided" excludeAll (excludeAWS),
+  "org.apache.spark" %% "spark-core" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-sql" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-mllib" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-hive" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-streaming" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-avro" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.spark" %% "spark-hadoop-cloud" % sparkVersion.value % "provided" excludeAll (excludeAWS) excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.holdenkarau" %% "spark-testing-base" % sparkTestVersion.value % "test" excludeAll (excludeSpark),
   "com.github.scopt" %% "scopt"         % "4.1.0",
   "org.scala-lang"    % "scala-library" % scalaVersion.value,
@@ -86,19 +86,19 @@ libraryDependencies ++= Seq(
   "com.redislabs"             %% "spark-redis"               % "3.1.0",
   "org.apache.kafka"          %% "kafka"                     % "3.9.0",
   "za.co.absa" %% "abris" % "3.2.2" % "provided" excludeAll (excludeAvro, excludeSpark),
-  "org.apache.hudi"   %% "hudi-spark-bundle" % "0.10.0" % "provided",
-  "org.apache.parquet" % "parquet-avro"      % "1.15.0" % "provided",
+  "org.apache.hudi" %% "hudi-spark-bundle" % "0.10.0" % "provided",
+  "org.apache.parquet" % "parquet-avro" % "1.15.0" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.amazon.deequ" % "deequ" % ("2.0.9-spark-" + sparkShortVersion.value) excludeAll (excludeSpark, excludeScalanlp),
-  "org.apache.avro"          % "avro"                  % "1.12.0" % "provided",
-  "com.databricks"          %% "spark-xml"             % "0.18.0",
-  "com.outr"                %% "hasher"                % "1.2.2",
-  "org.mongodb.spark"       %% "mongo-spark-connector" % "10.4.1",
-  "mysql"                    % "mysql-connector-java"  % "8.0.33",
-  "org.apache.logging.log4j" % "log4j-api"             % "2.24.3" % "provided",
-  "org.apache.logging.log4j" % "log4j-core"            % "2.24.3" % "provided",
-  "org.apache.logging.log4j" % "log4j-slf4j-impl"      % "2.24.3" % "provided",
-  "org.postgresql"           % "postgresql"            % "42.7.5",
-  "io.delta"                %% "delta-core"            % "2.4.0",
+  "org.apache.avro" % "avro" % "1.12.0" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "com.databricks"    %% "spark-xml"             % "0.18.0",
+  "com.outr"          %% "hasher"                % "1.2.2",
+  "org.mongodb.spark" %% "mongo-spark-connector" % "10.4.1",
+  "mysql"              % "mysql-connector-java"  % "8.0.33",
+  "org.apache.logging.log4j" % "log4j-api" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.logging.log4j" % "log4j-core" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.postgresql" % "postgresql" % "42.7.5",
+  "io.delta"      %% "delta-core" % "2.4.0",
   "io.vertx" % "vertx-json-schema" % "4.5.12" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.google.guava" % "guava" % "25.1-jre",
   "org.apache.sedona" %% ("sedona-spark-" + sparkShortVersion.value) % "1.6.1" excludeAll (excludeSpark),
