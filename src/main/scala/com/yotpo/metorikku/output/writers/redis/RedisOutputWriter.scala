@@ -1,6 +1,7 @@
 package com.yotpo.metorikku.output.writers.redis
 
 import com.redislabs.provider.redis._
+import com.yotpo.metorikku.utils.FileUtils
 import com.yotpo.metorikku.configuration.job.output.Redis
 import com.yotpo.metorikku.output.Writer
 import com.yotpo.metorikku.output.WriterSessionRegistration
@@ -8,8 +9,6 @@ import org.apache.log4j.LogManager
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
-
-import scala.util.parsing.json.JSONObject
 
 object RedisOutputWriter extends WriterSessionRegistration {
   def addConfToSparkSession(sparkConf: SparkConf, redisConf: Redis): Unit = {
@@ -38,8 +37,13 @@ class RedisOutputWriter(props: Map[String, String], sparkSession: SparkSession) 
         .na
         .fill("")
         .map(row =>
-          row.getAs[Any](redisOutputOptions.keyColumn).toString ->
-            JSONObject(row.getValuesMap(columns)).toString()
+          row.getAs[Any](redisOutputOptions.keyColumn).toString -> {
+            FileUtils
+              .getObjectMapperByExtension("json") match {
+              case Some(mapper) => mapper.writeValueAsString(row.getValuesMap(columns))
+              case _            => throw new IllegalStateException("JSON mapper not found")
+            }
+          }
         )
       log.info(s"Writting Dataframe into redis with key ${redisOutputOptions.keyColumn}")
       redisDF.sparkSession.sparkContext.toRedisKV(redisDF.toJavaRDD)

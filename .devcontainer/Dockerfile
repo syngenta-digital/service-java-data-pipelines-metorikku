@@ -35,11 +35,11 @@ ADD .devcontainer/hive-site.xml "/tmp/"
 # Install Java & related
 RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash
 
-ARG JAVA_VERSION="8.0.402-amzn"
-ARG SCALA_VERSION="2.12.17"
+ENV JAVA_VERSION="17.0.13-amzn"
+ENV SCALA_VERSION="2.12.18"
 ENV SCALA_BINARY_VERSION="2.12"
-ARG SBT_VERSION="1.8.0"
-ARG SPARK_VERSION="3.3.1"
+ENV SBT_VERSION="1.10.6"
+ENV SPARK_VERSION="3.5.2"
 
 RUN source "${HOME}/.sdkman/bin/sdkman-init.sh" \
     && sdk install java "$JAVA_VERSION" \
