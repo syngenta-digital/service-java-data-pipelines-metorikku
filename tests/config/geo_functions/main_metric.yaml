@@ -24,7 +24,7 @@ steps:
       WHERE ST_Covers(c.geometry, p.geometry)
 output:
   - dataFrameName: countries
-    outputType: CSV
+    outputType: Parquet
     outputOptions:
       saveMode: Overwrite
       path: place_ids_with_countries
