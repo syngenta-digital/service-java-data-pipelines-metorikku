@@ -128,11 +128,11 @@ jobs:
     machine:
       image: ubuntu-2204:current
       docker_layer_caching: true
-    resource_class: large
+    resource_class: xlarge
     steps:
       - checkout
-      - docker-compose-up
       - data-pipelines/utils_env
+      - docker-compose-up
       - scala-build
       - scala-test
   release:
@@ -143,8 +143,8 @@ jobs:
         default: ""
     steps:
       - checkout
-      - data-pipelines/utils_env
       - sbt-setup
+      - data-pipelines/utils_env
       - configure-git
       - scala-release:
           release_type: "<<parameters.release_type>>"
