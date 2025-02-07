@@ -16,7 +16,7 @@ scmInfo := Some(
   )
 )
 
-scalaVersion := Option(System.getenv("SCALA_VERSION")).getOrElse("2.12.19")
+scalaVersion := Option(System.getenv("SCALA_VERSION")).getOrElse("2.12.18")
 
 val sparkVersion: Def.Initialize[String] = Def.setting {
   Option(System.getenv("SPARK_VERSION")).getOrElse("3.5.2")
@@ -97,8 +97,8 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-api" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "org.apache.logging.log4j" % "log4j-core" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.postgresql" % "postgresql" % "42.7.5",
-  "io.delta"      %% "delta-core" % "2.4.0",
+  "org.postgresql" % "postgresql"  % "42.7.5",
+  "io.delta"      %% "delta-spark" % "3.3.0",
   "io.vertx" % "vertx-json-schema" % "4.5.12" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
   "com.google.guava" % "guava" % "25.1-jre",
   "org.apache.sedona" %% ("sedona-spark-" + sparkShortVersion.value) % "1.6.1" excludeAll (excludeSpark),
