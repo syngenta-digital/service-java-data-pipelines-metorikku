@@ -36,7 +36,7 @@ ADD .devcontainer/hive-site.xml "/tmp/"
 RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash
 
 ENV JAVA_VERSION="17.0.13-amzn"
-ENV SCALA_VERSION="2.12.18"
+ENV SCALA_VERSION="2.12.19"
 ENV SCALA_BINARY_VERSION="2.12"
 ENV SBT_VERSION="1.10.6"
 ENV SPARK_VERSION="3.5.2"

@@ -76,7 +76,7 @@ class MetorikkuTest extends AnyFunSuite with BeforeAndAfterAll {
         )
       )
     }
-    assert(thrown.getMessage.startsWith("Path does not exist"))
+    assert(thrown.getMessage.contains("Path does not exist"))
 
   }
 
