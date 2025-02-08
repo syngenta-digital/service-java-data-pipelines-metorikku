@@ -5,6 +5,7 @@ import java.sql.Timestamp
 import org.scalatest.Suites
 import org.scalatest.funsuite.AnyFunSuite
 import com.yotpo.metorikku.code.steps.functions.UserDefinedFunctions._
+import com.yotpo.metorikku.utils.FileUtils
 
 class SerDefinedFunctionsTests
     extends Suites(
@@ -106,31 +107,31 @@ class JsonObjectTest extends AnyFunSuite {
     assert(
       getJsonObject(
         json,
-        "$.store",
+        "$.store.book[*].category",
         compressOut = true
-      ) === "H4sIAAAAAAAA/42QQWvDMAyF/4rxOQlLQqDOdRuU0e6QFXYYOziukoi41nCcjlDy32eXQd3TBkKHJ/Q96V14SzTy+uPClXTQk114zS10YMEo4AmXsxvIevEVe9CsAZi86tBp8OKbXND0E6OOuQHYIxg3e0TCvyz69XqTiWpN7uAdKodkYvTzGfRi2Luc+yGGf5M9BvSWDM32Rs2LTIi/sS8Za651ID0imAh98Mfufunh8CZ84ec4tcaPH9JSVGkuQt/cfIv/+W7BnqRhe9Bn1Boi2z21C3tCNcZWVVWmRV7meVreBSfWz4S3qBYVdr0p6SvewjGKQoSE1x9nfazryAEAAA=="
+      ) === FileUtils.compressToGzip("[\"reference\",\"fiction\",\"fiction\",\"fiction\"]")
     )
   }
 
   test("Given a GZIP JSON and valid simple path returns a JSON") {
     assert(
       getJsonObject(
-        "H4sIAAAAAAAAAI2QQWvDMAyF/4rxOQlLQqDOdRuU0e6QFXYYOziukoi41nCcjlDy32eXQd3TBkKHJ/Q96V14SzTy+uPClXTQk114zS10YMEo4AmXsxvIevEVe9CsAZi86tBp8OKbXND0E6OOuQHYIxg3e0TCvyz69XqTiWpN7uAdKodkYvTzGfRi2Luc+yGGf5M9BvSWDM32Rs2LTIi/sS8Za651ID0imAh98Mfufunh8CZ84ec4tcaPH9JSVGkuQt/cfIv/+W7BnqRhe9Bn1Boi2z21C3tCNcZWVVWmRV7meVreBSfWz4S3qBYVdr0p6SvewjGKQoSE1x9nfazryAEAAA==",
-        "$.book[2].category",
+        FileUtils.compressToGzip(json),
+        "$.store.book[*].category",
         compressIn = true,
         compressOut = false
-      ) === "\"fiction\""
+      ) === "[\"reference\",\"fiction\",\"fiction\",\"fiction\"]"
     )
   }
 
   test("Given a GZIP JSON and valid simple path returns a GZIP JSON") {
     assert(
       getJsonObject(
-        "H4sIAAAAAAAAAI2QQWvDMAyF/4rxOQlLQqDOdRuU0e6QFXYYOziukoi41nCcjlDy32eXQd3TBkKHJ/Q96V14SzTy+uPClXTQk114zS10YMEo4AmXsxvIevEVe9CsAZi86tBp8OKbXND0E6OOuQHYIxg3e0TCvyz69XqTiWpN7uAdKodkYvTzGfRi2Luc+yGGf5M9BvSWDM32Rs2LTIi/sS8Za651ID0imAh98Mfufunh8CZ84ec4tcaPH9JSVGkuQt/cfIv/+W7BnqRhe9Bn1Boi2z21C3tCNcZWVVWmRV7meVreBSfWz4S3qBYVdr0p6SvewjGKQoSE1x9nfazryAEAAA==",
-        "$.book[2].category",
+        FileUtils.compressToGzip(json),
+        "$.store.book[*].category",
         compressIn = true,
         compressOut = true
-      ) === "H4sIAAAAAAAA/1NKy0wuyczPUwIAIxYt6wkAAAA="
+      ) === FileUtils.compressToGzip("[\"reference\",\"fiction\",\"fiction\",\"fiction\"]")
     )
   }
 
