@@ -27,7 +27,7 @@ val sparkShortVersion: Def.Initialize[String] = Def.setting {
 }
 
 val jacksonVersion: Def.Initialize[String] = Def.setting {
-  Option(System.getenv("JACKSON_VERSION")).getOrElse("2.16.2")
+  Option(System.getenv("JACKSON_VERSION")).getOrElse("2.15.2")
 }
 
 val sparkTestVersion: Def.Initialize[String] = Def.setting {
@@ -49,71 +49,108 @@ Test / testOptions := Seq(
 lazy val excludeAvro              = ExclusionRule(organization = "org.apache.avro", name = "avro")
 lazy val excludeSpark             = ExclusionRule(organization = "org.apache.spark")
 lazy val excludeLog4j             = ExclusionRule(organization = "org.apache.logging.log4j")
-lazy val excludeParquet           = ExclusionRule(organization = "org.apache.parquet")
 lazy val excludeScalanlp          = ExclusionRule(organization = "org.scalanlp")
 lazy val excludeJacksonCore       = ExclusionRule(organization = "com.fasterxml.jackson.core")
 lazy val excludeJacksonDataFormat = ExclusionRule(organization = "com.fasterxml.jackson.dataformat")
 lazy val excludeJacksonDataType   = ExclusionRule(organization = "com.fasterxml.jackson.datatype")
 lazy val excludeJacksonModule     = ExclusionRule(organization = "com.fasterxml.jackson.module")
 lazy val excludeAWS               = ExclusionRule(organization = "com.amazonaws")
+lazy val excludeGoogleGuava       = ExclusionRule(organization = "com.google.guava")
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-sql" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-mllib" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-hive" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-streaming" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-avro" % sparkVersion.value % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.spark" %% "spark-hadoop-cloud" % sparkVersion.value % "provided" excludeAll (excludeAWS) excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.holdenkarau" %% "spark-testing-base" % sparkTestVersion.value % "test" excludeAll (excludeSpark),
-  "com.github.scopt" %% "scopt"         % "4.1.0",
-  "org.scala-lang"    % "scala-library" % scalaVersion.value,
-  "com.typesafe.play" %% "play-json" % "2.10.6" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
+  "org.scala-lang"           % "scala-library"         % scalaVersion.value,
+  
+  "com.google.guava"    % "guava"   % "25.0-jre",
+  "com.typesafe.play"        %% "play-json"            % "2.10.6",
+  "com.github.scopt"         %% "scopt"                % "4.1.0",
+  "za.co.absa"               %% "abris"                % "3.2.2"  % "provided" excludeAll (excludeAvro),
+  "org.apache.logging.log4j" % "log4j-api"             % "2.24.3" % "provided",
+  "org.apache.logging.log4j" % "log4j-core"            % "2.24.3" % "provided",
+  "org.apache.logging.log4j" % "log4j-slf4j-impl"      % "2.24.3" % "provided",
+  "com.hubspot.jinjava"      % "jinjava"               % "2.7.0",
+  "com.jayway.jsonpath"      % "json-path"             % "2.9.0",
+
+  "org.apache.parquet"       % "parquet-avro"          % "1.15.0" % "provided",
+  "com.amazon.deequ"         % "deequ"                 % ("2.0.9-spark-" + sparkShortVersion.value),
+  "org.apache.avro"          % "avro"                  % "1.12.0" % "provided",
+
+  "com.amazonaws"          % "aws-java-sdk-s3"                                    % "1.12.780",
+  "com.amazonaws"          % "aws-java-sdk-dynamodb"                              % "1.12.780",
+  "software.amazon.awssdk" % "dynamodb"                                           % "2.30.15",
+  "software.amazon.awssdk" % "glue"                                               % "2.30.15",
+  "software.amazon.awssdk" % "s3"                                                 % "2.30.15",
+  "software.amazon.awssdk" % "sts"                                                % "2.30.15",
+
+  
+  "com.databricks"              %% "spark-xml"                                          % "0.18.0",
+  "com.datastax.spark"          %% "spark-cassandra-connector"                          % "3.5.1",
+  "com.outr"                    %% "hasher"                                             % "1.2.2",
+  "com.redislabs"               %% "spark-redis"                                        % "3.1.0",
+  "com.segment.analytics.java"  % "analytics"                                           % "2.1.1" % "provided",
+  "com.syncron.amazonaws"       % "simba-athena-jdbc-driver"                            % "2.1.5" from s"https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.5.1000/AthenaJDBC42-2.1.5.1000.jar",
+  "io.delta"                    %% "delta-spark"                                        % "3.3.0",
+  "io.github.spark-redshift-community" %% "spark-redshift"                              % "6.3.0-spark_3.5" excludeAll (excludeAWS),
+  "io.trino"                    % "trino-jdbc"                                          % "470",
+  "io.vertx"                    % "vertx-json-schema"                                   % "4.5.12",
+  "mysql"                       % "mysql-connector-java"                                % "8.0.33",
+  "net.snowflake"               % "snowflake-jdbc"                                      % "3.22.0",
+  "org.apache.hudi"             %% "hudi-spark-bundle"                                  % "0.10.0" % "provided",
+  "org.apache.iceberg"          %% ("iceberg-spark-runtime-" + sparkShortVersion.value) % "1.7.1",
+  "org.apache.kafka"            %% "kafka"                                              % "3.9.0",
+  "org.apache.sedona"           %% ("sedona-spark-" + sparkShortVersion.value)          % "1.6.1",
+  "org.datasyslab"              % "geotools-wrapper"                                    % "1.6.1-28.2",
+  "org.influxdb"                % "influxdb-java"                                       % "2.24",
+  "org.mongodb.spark"           %% "mongo-spark-connector"                              % "10.4.1",
+  "org.postgresql"              % "postgresql"                                          % "42.7.5",
+).map(
+  _.excludeAll(
+    excludeSpark,
+    excludeJacksonCore,
+    excludeJacksonDataFormat,
+    excludeJacksonDataType,
+    excludeJacksonModule,
+    excludeScalanlp,
+  )
+)
+
+libraryDependencies ++= Seq(
+  "org.apache.spark" %% "spark-core"           % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-sql"            % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-mllib"          % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-hive"           % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-streaming"      % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-avro"           % sparkVersion.value % "provided",
+  "org.apache.spark" %% "spark-hadoop-cloud" % sparkVersion.value % "provided" excludeAll (excludeAWS),
+  "com.holdenkarau"  %% "spark-testing-base" % sparkTestVersion.value % "test",
+)
+
+libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core"       % "jackson-annotations"     % jacksonVersion.value,
   "com.fasterxml.jackson.core"       % "jackson-core"            % jacksonVersion.value,
   "com.fasterxml.jackson.core"       % "jackson-databind"        % jacksonVersion.value,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion.value,
+  "com.fasterxml.jackson.datatype"   % "jackson-datatype-jsr310" % jacksonVersion.value,
+  "com.fasterxml.jackson.module"     %% "jackson-module-scala"   % jacksonVersion.value,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion.value,
   "com.fasterxml.jackson.datatype"   % "jackson-datatype-jdk8"   % jacksonVersion.value,
+)
+
+dependencyOverrides ++= Seq(
+  "com.fasterxml.jackson.core"       % "jackson-annotations"     % jacksonVersion.value,
+  "com.fasterxml.jackson.core"       % "jackson-core"            % jacksonVersion.value,
+  "com.fasterxml.jackson.core"       % "jackson-databind"        % jacksonVersion.value,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion.value,
   "com.fasterxml.jackson.datatype"   % "jackson-datatype-jsr310" % jacksonVersion.value,
-  "com.fasterxml.jackson.module"    %% "jackson-module-scala"    % jacksonVersion.value,
-  "com.hubspot.jinjava" % "jinjava" % "2.7.4" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.influxdb" % "influxdb-java" % "2.24",
-  "io.github.spark-redshift-community" %% "spark-redshift" % "6.3.0-spark_3.5" excludeAll (excludeAWS, excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.segment.analytics.java" % "analytics"                 % "2.1.1" % "provided",
-  "com.datastax.spark"        %% "spark-cassandra-connector" % "3.5.1",
-  "com.redislabs"             %% "spark-redis"               % "3.1.0",
-  "org.apache.kafka"          %% "kafka"                     % "3.9.0",
-  "za.co.absa" %% "abris" % "3.2.2" % "provided" excludeAll (excludeAvro, excludeSpark),
-  "org.apache.hudi" %% "hudi-spark-bundle" % "0.10.0" % "provided",
-  "org.apache.parquet" % "parquet-avro" % "1.15.0" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.amazon.deequ" % "deequ" % ("2.0.9-spark-" + sparkShortVersion.value) excludeAll (excludeSpark, excludeScalanlp),
-  "org.apache.avro" % "avro" % "1.12.0" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.databricks"    %% "spark-xml"             % "0.18.0",
-  "com.outr"          %% "hasher"                % "1.2.2",
-  "org.mongodb.spark" %% "mongo-spark-connector" % "10.4.1",
-  "mysql"              % "mysql-connector-java"  % "8.0.33",
-  "org.apache.logging.log4j" % "log4j-api" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.logging.log4j" % "log4j-core" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.24.3" % "provided" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.postgresql" % "postgresql"  % "42.7.5",
-  "io.delta"      %% "delta-spark" % "3.3.0",
-  "io.vertx" % "vertx-json-schema" % "4.5.12" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.google.guava" % "guava" % "25.1-jre",
-  "org.apache.sedona" %% ("sedona-spark-" + sparkShortVersion.value) % "1.6.1" excludeAll (excludeSpark),
-  "org.datasyslab" % "geotools-wrapper" % "1.7.0-28.5" excludeAll (excludeSpark),
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.12.780" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.amazonaws" % "aws-java-sdk-dynamodb" % "1.12.780" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "software.amazon.awssdk" % "dynamodb" % "2.30.15" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "software.amazon.awssdk" % "glue" % "2.30.15" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "software.amazon.awssdk" % "s3" % "2.30.15" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "software.amazon.awssdk" % "sts" % "2.30.15" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "org.apache.iceberg" %% ("iceberg-spark-runtime-" + sparkShortVersion.value) % "1.7.1" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "com.jayway.jsonpath" % "json-path" % "2.9.0" excludeAll (excludeJacksonCore, excludeJacksonDataFormat, excludeJacksonDataType, excludeJacksonModule),
-  "io.trino" % "trino-jdbc" % "470",
-  "com.syncron.amazonaws" % "simba-athena-jdbc-driver" % "2.1.5" from s"https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.5.1000/AthenaJDBC42-2.1.5.1000.jar",
-  "net.snowflake" % "snowflake-jdbc" % "3.22.0"
+  "com.fasterxml.jackson.module"     %% "jackson-module-scala"   % jacksonVersion.value,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion.value,
+  "com.fasterxml.jackson.datatype"   % "jackson-datatype-jdk8"   % jacksonVersion.value,
+)
+
+assembly / assemblyShadeRules ++= Seq(
+  ShadeRule
+    .rename("com.google.**" -> "shaded.com.google.@1")
+    .inAll
 )
 
 resolvers ++= Seq(
