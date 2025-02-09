@@ -141,7 +141,7 @@ class MongoDBOutputWriter(
 
         options ++= props
 
-        dataFrame.write.format("mongodb").mode(mongoDBProps.saveMode).options(options).save()
+        dataFrame.write.format("com.mongodb.spark.sql.connector.MongoTableProvider").mode(mongoDBProps.saveMode).options(options).save()
 
         props.get("postCommand") match {
           case Some(command) => {

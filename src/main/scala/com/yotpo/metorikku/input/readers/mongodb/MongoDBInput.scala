@@ -48,7 +48,7 @@ object MongoDBInput {
   ): DataFrame = {
     log.debug(f"Using options: ${(options - "uri")}")
 
-    var df = sparkSession.read.format("mongodb").options(options)
+    var df = sparkSession.read.format("com.mongodb.spark.sql.connector.MongoTableProvider").options(options)
 
     schemaPath match {
       case Some(path) =>
