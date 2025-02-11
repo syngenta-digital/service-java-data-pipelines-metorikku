@@ -55,12 +55,12 @@ lazy val excludeJacksonDataFormat = ExclusionRule(organization = "com.fasterxml.
 lazy val excludeJacksonDataType   = ExclusionRule(organization = "com.fasterxml.jackson.datatype")
 lazy val excludeJacksonModule     = ExclusionRule(organization = "com.fasterxml.jackson.module")
 lazy val excludeAWS               = ExclusionRule(organization = "com.amazonaws")
-lazy val excludeGoogleGuava       = ExclusionRule(organization = "com.google.guava")
 
 libraryDependencies ++= Seq(
   "org.scala-lang"           % "scala-library"         % scalaVersion.value,
   
-  "com.google.guava"    % "guava"   % "25.0-jre",
+  "com.google.guava"         % "guava"                 % "25.0-jre",
+  "com.google.code.gson"     % "gson"                  % "2.2.4",
   "com.typesafe.play"        %% "play-json"            % "2.10.6",
   "com.github.scopt"         %% "scopt"                % "4.1.0",
   "za.co.absa"               %% "abris"                % "3.2.2"  % "provided" excludeAll (excludeAvro),
