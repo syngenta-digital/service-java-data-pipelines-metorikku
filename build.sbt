@@ -95,7 +95,7 @@ libraryDependencies ++= Seq(
   "mysql"                       % "mysql-connector-java"                                % "8.0.33",
   "net.snowflake"               % "snowflake-jdbc"                                      % "3.22.0",
   "org.apache.hudi"             %% "hudi-spark-bundle"                                  % "0.10.0" % "provided",
-  "org.apache.iceberg"          %% ("iceberg-spark-runtime-" + sparkShortVersion.value) % "1.7.1",
+  "org.apache.iceberg"          %% ("iceberg-spark-runtime-" + sparkShortVersion.value) % "1.8.0",
   "org.apache.kafka"            %% "kafka"                                              % "3.9.0",
   "org.apache.sedona"           %% ("sedona-spark-" + sparkShortVersion.value)          % "1.6.1",
   "org.datasyslab"              % "geotools-wrapper"                                    % "1.6.1-28.2",
