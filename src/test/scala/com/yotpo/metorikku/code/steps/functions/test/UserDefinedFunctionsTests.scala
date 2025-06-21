@@ -181,7 +181,7 @@ class JsonObjectTest extends AnyFunSuite {
       })
     )
     time(
-      "Single getJsonObjects",
+      "Single getJsonDoubleLists",
       methodIterations.foreach(x => {
         getJsonDoubleLists(
           bigJson,

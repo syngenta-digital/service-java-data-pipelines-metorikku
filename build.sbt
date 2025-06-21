@@ -93,7 +93,7 @@ libraryDependencies ++= Seq(
   "io.trino"                    % "trino-jdbc"                                          % "476",
   "io.vertx"                    % "vertx-json-schema"                                   % "4.5.15",
   "mysql"                       % "mysql-connector-java"                                % "8.0.33",
-  "net.snowflake"               % "snowflake-jdbc"                                      % "3.24.",
+  "net.snowflake"               % "snowflake-jdbc"                                      % "3.24.2",
   "org.apache.hudi"             %% "hudi-spark-bundle"                                  % "0.10.0" % "provided",
   "org.apache.iceberg"          %% ("iceberg-spark-runtime-" + sparkShortVersion.value) % "1.9.1",
   "org.apache.kafka"            %% "kafka"                                              % "3.9.1",
