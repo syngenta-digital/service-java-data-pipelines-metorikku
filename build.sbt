@@ -67,7 +67,7 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-api"             % "2.25.0" % "provided",
   "org.apache.logging.log4j" % "log4j-core"            % "2.25.0" % "provided",
   "org.apache.logging.log4j" % "log4j-slf4j-impl"      % "2.25.0" % "provided",
-  "com.hubspot.jinjava"      % "jinjava"               % "2.8.0",
+  "com.hubspot.jinjava"      % "jinjava"               % "2.7.0",
   "com.jayway.jsonpath"      % "json-path"             % "2.9.0",
 
   "org.apache.parquet"       % "parquet-avro"          % "1.15.0" % "provided",
