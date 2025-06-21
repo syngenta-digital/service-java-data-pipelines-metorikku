@@ -2,7 +2,8 @@ package com.yotpo.metorikku.code.steps.functions
 
 import com.jayway.jsonpath.Configuration
 import com.jayway.jsonpath.JsonPath
-import net.minidev.json.JSONValue
+import net.minidev.json.{JSONValue, JSONArray}
+import scala.jdk.CollectionConverters._
 
 import java.sql.Timestamp
 import java.time.Instant
@@ -29,8 +30,7 @@ object UserDefinedFunctions {
     Option(getJsonObjects(jsonTxt, List(path), compressIn, compressOut).headOption)
       .map(x => {
         x.head
-      })
-      .getOrElse(null) // scalastyle:ignore null
+      }).orNull // scalastyle:ignore null
   }
 
   def getJsonObjects(
@@ -58,5 +58,21 @@ object UserDefinedFunctions {
         }).getOrElse(null) // scalastyle:ignore null
       })
     }).getOrElse(null) // scalastyle:ignore null
+  }
+
+  def getJsonDoubleLists(
+                      jsonTxt: String,
+                      paths: List[String]
+                    ): List[List[Double]] = {
+    Try({
+      jsonPathConfig.jsonProvider().parse(jsonTxt)
+    }).map(document => {
+      paths.map(path => {
+        Try({
+          val rawValue: JSONArray = JsonPath.read(document, path)
+          rawValue.asScala.toList.asInstanceOf[List[Double]]
+        }).getOrElse(null) // scalastyle:ignore null
+      })
+    }).get // scalastyle:ignore null
   }
 }

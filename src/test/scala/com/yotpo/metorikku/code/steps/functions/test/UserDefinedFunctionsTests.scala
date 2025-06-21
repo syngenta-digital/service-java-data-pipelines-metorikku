@@ -143,9 +143,21 @@ class JsonObjectTest extends AnyFunSuite {
     ret
   }
 
+  test("Test getJsonDoubleLists") {
+    val bigJson =
+      scala.io.Source.fromFile("src/test/configurations/mocks/big_file.json").getLines.mkString
+    val bigJsonPath =
+      """$.results[*].predictions[?(@.feature_category == "daily_disease_risk")].features[?(@.type == "disease_development_by_plant_compartment" && @.attributes.disease_code == "ERYSGR" && @.attributes.plant_compartment == "LEAF1")].value"""
+
+    assert(getJsonDoubleLists(
+          bigJson,
+          List(bigJsonPath)
+        ).head.take(10) === List(0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+  }
+
   test("Test performance getJsonObjects") {
-    val methodIterations = (0 to 100)
-    val pathIterations   = (0 to 10)
+    val methodIterations = (0 to 10)
+    val pathIterations   = (0 to 100)
     val bigJson =
       scala.io.Source.fromFile("src/test/configurations/mocks/big_file.json").getLines.mkString
     val bigJsonPath =
@@ -166,6 +178,17 @@ class JsonObjectTest extends AnyFunSuite {
       "Multiple getJsonObject",
       methodIterations.foreach(x => {
         pathIterations.foreach(y => getJsonObject(bigJson, bigJsonPath))
+      })
+    )
+    time(
+      "Single getJsonObjects",
+      methodIterations.foreach(x => {
+        getJsonDoubleLists(
+          bigJson,
+          pathIterations
+            .map(y => bigJsonPath)
+            .toList
+        )
       })
     )
   }

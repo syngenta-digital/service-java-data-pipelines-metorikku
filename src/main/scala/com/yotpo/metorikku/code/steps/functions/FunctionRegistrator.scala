@@ -17,7 +17,7 @@ object FunctionRegistrator {
     spark.udf.register(
       "GET_JSON_OBJECT",
       udf[String, String, String]((jsonTxt: String, path: String) =>
-        UserDefinedFunctions.getJsonObject(jsonTxt, path, false, false)
+        UserDefinedFunctions.getJsonObject(jsonTxt, path)
       )
     )
 
@@ -31,7 +31,7 @@ object FunctionRegistrator {
     spark.udf.register(
       "GET_JSON_OBJECTS",
       udf[List[String], String, List[String]]((jsonTxt: String, paths: List[String]) =>
-        UserDefinedFunctions.getJsonObjects(jsonTxt, paths, false, false)
+        UserDefinedFunctions.getJsonObjects(jsonTxt, paths)
       )
     )
 
@@ -39,6 +39,13 @@ object FunctionRegistrator {
       "GET_JSON_OBJECTS_GZIP",
       udf[List[String], String, List[String], Boolean, Boolean](
         UserDefinedFunctions.getJsonObjects
+      )
+    )
+
+    spark.udf.register(
+      "GET_JSON_DOUBLE_LISTS",
+      udf[List[List[Double]], String, List[String]]((jsonTxt: String, paths: List[String]) =>
+        UserDefinedFunctions.getJsonDoubleLists(jsonTxt, paths)
       )
     )
   }
