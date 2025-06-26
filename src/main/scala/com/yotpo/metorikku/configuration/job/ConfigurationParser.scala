@@ -22,6 +22,8 @@ object ConfigurationParser {
 
   val CLIparser: OptionParser[ConfigFileName] =
     new scopt.OptionParser[ConfigFileName]("Metorikku") {
+      override def errorOnUnknownArgument: Boolean = false
+
       head("Metorikku", "1.0")
       opt[String]('j', "job")
         .action((x, c) => c.copy(job = Option(x)))
