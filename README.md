@@ -250,6 +250,10 @@ In order to generate a new version:
     spark-submit --class com.yotpo.metorikku.MetorikkuValidator target/service-java-data-pipelines-metorikku_${SCALA_BINARY_VERSION}*.jar -f examples/movies.yaml
     ```
 
+### Running in Glue
+
+Glue is a serverless Spark service provided by AWS. You cannot run directly a application in a jar, but you must run an app in a scala file that wraps Metorikku. Use the [GlueJobApp.scala](examples/GlueJobApp.scala)  as an example to run Metorikku in Glue.
+
 ## Other interesting local commands
 
 1. Access to Postgres (non vscode shell):
